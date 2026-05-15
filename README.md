@@ -27,3 +27,4 @@ Dự án sử dụng Python để phân tích dữ liệu dinh dưỡng và đư
 - Ngôn ngữ: Python
 - Thư viện: Pandas, Numpy
 - Công cụ: Google Colab
+link web: https://goiythucdondinhduong-kwxakv7fgej95crxqezodf.streamlit.app/
