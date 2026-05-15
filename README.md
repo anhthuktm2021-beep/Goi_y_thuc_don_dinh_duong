@@ -18,8 +18,11 @@ Dự án sử dụng Python để phân tích dữ liệu dinh dưỡng và đư
   - Triển khai thuật toán tìm kiếm và chọn lọc món ăn ngẫu nhiên có điều kiện (Randomized Heuristic).
   - Tự động phân bổ thực đơn cho 3 bữa (Sáng 25% - Trưa 40% - Chiều 35%) đảm bảo sai số Calo và Macros luôn dưới mức 15%.
 
-- [ ] **Giai đoạn 4: Đóng gói & Trực quan hóa (Finalization & Visualization)**
-  - (Đang tiến hành...)
+- [x] **Giai đoạn 4: Trực quan hóa & Đóng gói (Visualization & Finalization)**
+  - Ứng dụng `matplotlib` để xây dựng Dashboard báo cáo tự động.
+  - Vẽ biểu đồ tròn (Pie Chart) trực quan hóa tỷ lệ phân bổ Macros (Đạm - Đường - Béo).
+  - Vẽ biểu đồ cột (Bar Chart) so sánh đối chiếu giữa Năng lượng Mục tiêu và Năng lượng Thực tế của thực đơn.
+  - Hoàn thiện luồng dữ liệu thông suốt từ khâu Input đến Output.
 ## Công nghệ sử dụng
 - Ngôn ngữ: Python
 - Thư viện: Pandas, Numpy
