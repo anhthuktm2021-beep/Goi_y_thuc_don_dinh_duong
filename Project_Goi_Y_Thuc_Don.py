@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import random
-
 # Cài đặt giao diện trang web
 st.set_page_config(page_title="Diet Recommender", layout="wide")
 st.title("🥗 Ứng dụng Gợi ý Thực đơn Cá nhân hóa")
@@ -64,15 +63,37 @@ if st.sidebar.button("Tính toán & Lên thực đơn"):
         st.pyplot(fig)
 
     with col2:
-        st.write("### Gợi ý bữa ăn (Minh họa)")
-        # Lấy random 3 món ăn cho vui để demo (bạng có thể bê nguyên hàm goi_y_bua_an phức tạp vào đây)
-        bua_sang = df.sample(2)
-        bua_trua = df.sample(2)
+        st.write("### 🍽️ Thực đơn gợi ý cho bạn: ")
         
-        st.write("**Bữa Sáng:**")
-        for idx, row in bua_sang.iterrows():
-            st.write(f"- {row['Food_Name']} ({row['Grams']}g) - {row['Calories']} kcal")
-            
-        st.write("**Bữa Trưa:**")
-        for idx, row in bua_trua.iterrows():
-            st.write(f"- {row['Food_Name']} ({row['Grams']}g) - {row['Calories']} kcal")
+        # Chia mục tiêu cho từng bữa
+        sang_t = tdee_target * 0.25
+        trua_t = tdee_target * 0.40
+        chieu_t = tdee_target * 0.35
+
+        # Hàm bốc món nhanh cho Web (Bốc 2 món mỗi bữa)
+        def bốc_món(target_cal):
+            sub_df = df[df['Calories'] <= target_cal]
+            món = sub_df.sample(2)
+            tong = món['Calories'].sum()
+            return món, tong
+
+        m_sang, c_sang = bốc_món(sang_t)
+        m_trua, c_trua = bốc_món(trua_t)
+        m_chieu, c_chieu = bốc_món(chieu_t)
+
+        # Hiển thị từng bữa
+        st.info(f"🌅 **Bữa Sáng (~{sang_t:.0f} kcal):**")
+        for _, row in m_sang.iterrows():
+            st.write(f"- {row['Food_Name']} ({row['Grams']}g): {row['Calories']} kcal")
+        
+        st.success(f"☀️ **Bữa Trưa (~{trua_t:.0f} kcal):**")
+        for _, row in m_trua.iterrows():
+            st.write(f"- {row['Food_Name']} ({row['Grams']}g): {row['Calories']} kcal")
+
+        st.warning(f"🌙 **Bữa Chiều (~{chieu_t:.0f} kcal):**")
+        for _, row in m_chieu.iterrows():
+            st.write(f"- {row['Food_Name']} ({row['Grams']}g): {row['Calories']} kcal")
+
+        st.divider()
+        st.metric("Tổng năng lượng thực tế", f"{c_sang + c_sang + c_chieu:.0f} kcal", f"{tdee_target:.0f} mục tiêu")
+        
