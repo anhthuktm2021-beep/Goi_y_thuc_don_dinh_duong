@@ -72,10 +72,29 @@ if st.sidebar.button("Tính toán & Lên thực đơn"):
 
         # Hàm bốc món nhanh cho Web (Bốc 2 món mỗi bữa)
         def bốc_món(target_cal):
-            sub_df = df[df['Calories'] <= target_cal]
-            món = sub_df.sample(2)
-            tong = món['Calories'].sum()
-            return món, tong
+            ket_qua = pd.DataFrame()
+            tong_calo = 0
+            so_lan_thu = 0 # Biến đếm để tránh vòng lặp chạy vô hạn
+            
+            # Cố gắng nhặt món cho đến khi tổng calo đạt ít nhất 90% mục tiêu
+            while tong_calo < target_cal * 0.9 and so_lan_thu < 50:
+                so_lan_thu += 1
+                
+                # Bốc ngẫu nhiên 1 món từ menu
+                mon_ngau_nhien = df.sample(1)
+                calo_mon = mon_ngau_nhien['Calories'].values[0]
+                
+                # Kiểm tra: Nếu nạp món này vào mà tổng calo KHÔNG bị lố quá 110% mục tiêu thì mới lấy
+                if tong_calo + calo_mon <= target_cal * 1.1:
+                    ket_qua = pd.concat([ket_qua, mon_ngau_nhien])
+                    tong_calo += calo_mon
+                    
+            # Trường hợp xui xẻo (rất hiếm) vòng lặp kết thúc mà khay vẫn trống
+            if ket_qua.empty:
+                ket_qua = df.sample(1)
+                tong_calo = ket_qua['Calories'].values[0]
+                
+            return ket_qua, tong_calo
 
         m_sang, c_sang = bốc_món(sang_t)
         m_trua, c_trua = bốc_món(trua_t)
